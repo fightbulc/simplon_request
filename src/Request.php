@@ -119,6 +119,101 @@ class Request
     }
 
     /**
+     * @param null|string $key
+     *
+     * @return array|mixed|null
+     */
+    public static function getGetData($key = null)
+    {
+        return self::readData($_GET, $key);
+    }
+
+    /**
+     * @param null|string $key
+     *
+     * @return bool
+     */
+    public static function hasGetData($key = null)
+    {
+        return self::hasData($_GET, $key);
+    }
+
+    /**
+     * @param null|string $key
+     *
+     * @return array|mixed|null
+     */
+    public static function getPostData($key = null)
+    {
+        return self::readData($_POST, $key);
+    }
+
+    /**
+     * @param null|string $key
+     *
+     * @return bool
+     */
+    public static function hasPostData($key = null)
+    {
+        return self::hasData($_POST, $key);
+    }
+
+    /**
+     * @param null|string $key
+     *
+     * @return array|mixed|null
+     */
+    public static function getSessionData($key = null)
+    {
+        return self::readData($_SESSION, $key);
+    }
+
+    /**
+     * @param null|string $key
+     *
+     * @return bool
+     */
+    public static function hasSessionData($key = null)
+    {
+        return self::hasData($_SESSION, $key);
+    }
+
+    /**
+     * @param $source
+     * @param null|string $key
+     *
+     * @return array|null|mixed
+     */
+    private static function readData($source, $key = null)
+    {
+        if (isset($source))
+        {
+            if ($key === null)
+            {
+                return (array)$source;
+            }
+
+            if (isset($source[$key]))
+            {
+                return $source[$key];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param null|array $source
+     * @param null $key
+     *
+     * @return bool
+     */
+    private static function hasData($source, $key = null)
+    {
+        return self::readData($source, $key) !== null;
+    }
+
+    /**
      * @param array $opt
      *
      * @return string
