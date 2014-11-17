@@ -13,7 +13,7 @@ class Request
      * @param $url
      * @param array $data
      *
-     * @return string
+     * @return RequestResponse
      * @throws RequestException
      */
     public static function get($url, array $data)
@@ -30,7 +30,7 @@ class Request
      * @param $url
      * @param array $data
      *
-     * @return string
+     * @return RequestResponse
      * @throws RequestException
      */
     public static function post($url, array $data)
@@ -52,7 +52,7 @@ class Request
      * @param int $id
      * @param string $version
      *
-     * @return array
+     * @return RequestResponse
      * @throws RequestException
      */
     public static function jsonRpc($url, $method, array $params = [], $id = 1, $version = '2.0')
@@ -71,18 +71,18 @@ class Request
         ];
 
         // request
-        $response = self::process($opt);
+        $requestResponse = self::process($opt);
 
         // decode json
-        $decoded = json_decode($response, true);
+        $decoded = json_decode($requestResponse->getContent(), true);
 
         // if decoding fails throw exception with received response
         if ($decoded === null)
         {
-            throw new RequestException($response);
+            throw new RequestException($requestResponse);
         }
 
-        return (array)$decoded;
+        return $requestResponse->setContent($decoded);
     }
 
     /**
@@ -216,7 +216,7 @@ class Request
     /**
      * @param array $opt
      *
-     * @return string
+     * @return RequestResponse
      * @throws RequestException
      */
     private static function process(array $opt)
@@ -230,6 +230,9 @@ class Request
         // cache error if any occurs
         $error = curl_error($curl);
 
+        // cache http code
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
         curl_close($curl);
 
         // throw if request failed
@@ -238,6 +241,10 @@ class Request
             throw new RequestException($error);
         }
 
-        return (string)$response;
+        // --------------------------------------
+
+        return (new RequestResponse())
+            ->setHttpCode($httpCode)
+            ->setContent($response);
     }
 }
