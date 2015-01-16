@@ -9,7 +9,7 @@ use Simplon\Helper\Helper;
  * @package Simplon\Request
  * @author Tino Ehrich (tino@bigpun.me)
  */
-class RedirectResponseUtil
+class RedirectResponse
 {
     /**
      * @var string
