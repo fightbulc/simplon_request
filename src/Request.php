@@ -87,32 +87,11 @@ class Request
 
     /**
      * @param string $url
-     * @param array $params
-     *
-     * @return string
      */
-    public static function renderUrl($url, array $params = [])
-    {
-        // replace placeholders
-        if (empty($params) === false)
-        {
-            foreach ($params as $k => $v)
-            {
-                $url = str_replace('{{' . $k . '}}', $v, $url);
-            }
-        }
-
-        return (string)$url;
-    }
-
-    /**
-     * @param string $url
-     * @param array $params
-     */
-    public static function redirect($url, array $params = [])
+    public static function redirect($url)
     {
         // redirect now
-        header('Location: ' . self::renderUrl($url, $params));
+        header('Location: ' . $url);
 
         // exit script
         exit;
