@@ -17,13 +17,12 @@ class RedirectResponse
     private $url;
 
     /**
-     * @param $url
-     * @param null $path
+     * @param string|array $url
      * @param array $params
      */
-    public function __construct($url, $path = null, array $params = [])
+    public function __construct($url, array $params = [])
     {
-        $this->url = Helper::urlRender($url, $path, $params);
+        $this->url = Helper::urlRender($url, $params);
     }
 
     /**
