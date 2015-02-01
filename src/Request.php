@@ -9,6 +9,10 @@ namespace Simplon\Request;
  */
 class Request
 {
+    const POST_VARIANT_POST = 'POST';
+    const POST_VARIANT_PUT = 'PUT';
+    const POST_VARIANT_DELETE = 'DELETE';
+
     /**
      * @param $url
      * @param array $data
@@ -33,16 +37,33 @@ class Request
      * @return RequestResponse
      * @throws RequestException
      */
-    public static function post($url, array $data)
+    public static function post($url, array $data = [])
     {
-        $opt = [
-            CURLOPT_URL            => $url,
-            CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_POST           => 1,
-            CURLOPT_POSTFIELDS     => $data
-        ];
+        return self::postVariant(self::POST_VARIANT_POST, $url, $data);
+    }
 
-        return self::process($opt);
+    /**
+     * @param $url
+     * @param array $data
+     *
+     * @return RequestResponse
+     * @throws RequestException
+     */
+    public static function put($url, array $data = [])
+    {
+        return self::postVariant(self::POST_VARIANT_PUT, $url, $data);
+    }
+
+    /**
+     * @param $url
+     * @param array $data
+     *
+     * @return RequestResponse
+     * @throws RequestException
+     */
+    public static function delete($url, array $data = [])
+    {
+        return self::postVariant(self::POST_VARIANT_DELETE, $url, $data);
     }
 
     /**
@@ -190,6 +211,27 @@ class Request
     private static function hasData($source, $key = null)
     {
         return self::readData($source, $key) !== null;
+    }
+
+    /**
+     * @param $type
+     * @param $url
+     * @param array $data
+     *
+     * @return RequestResponse
+     * @throws RequestException
+     */
+    private static function postVariant($type, $url, array $data = [])
+    {
+        $opt = [
+            CURLOPT_URL            => $url,
+            CURLOPT_CUSTOMREQUEST  => $type,
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_POST           => 1,
+            CURLOPT_POSTFIELDS     => $data
+        ];
+
+        return self::process($opt);
     }
 
     /**
