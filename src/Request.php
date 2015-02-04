@@ -159,6 +159,31 @@ class Request
     }
 
     /**
+     * @param bool $isJson
+     *
+     * @return array|string
+     */
+    public static function getInputStream($isJson = true)
+    {
+        $requestJson = (string)file_get_contents('php://input');
+
+        if ($isJson === true)
+        {
+            return (array)json_decode($requestJson, true);
+        }
+
+        return $requestJson;
+    }
+
+    /**
+     * @return bool
+     */
+    public static function hasInputStream()
+    {
+        return self::hasData(self::getInputStream());
+    }
+
+    /**
      * @param null|string $key
      *
      * @return array|mixed|null
