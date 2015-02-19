@@ -140,31 +140,14 @@ class Request
     }
 
     /**
-     * @param null|string $key
-     * @param null|string $fallbackValue
+     * @param null $key
+     * @param null $fallbackValue
      *
-     * @return mixed|null
+     * @return array|string
      */
     public static function getPostData($key = null, $fallbackValue = null)
     {
-        $response = self::getInputStream(false);
-
-        if ($response !== null)
-        {
-            parse_str($response, $postData);
-
-            if ($key === null)
-            {
-                return $postData;
-            }
-
-            if (isset($postData[$key]))
-            {
-                return $postData[$key];
-            }
-        }
-
-        return $fallbackValue;
+        return self::readData($_POST, $key, $fallbackValue);
     }
 
     /**
@@ -174,7 +157,7 @@ class Request
      */
     public static function hasPostData($key = null)
     {
-        return self::hasData(self::getInputStream(false), $key);
+        return self::hasData($_POST, $key);
     }
 
     /**
