@@ -120,12 +120,13 @@ class Request
 
     /**
      * @param null|string $key
+     * @param null|string $fallbackValue
      *
-     * @return array|mixed|null
+     * @return mixed|null
      */
-    public static function getGetData($key = null)
+    public static function getGetData($key = null, $fallbackValue = null)
     {
-        return self::readData($_GET, $key);
+        return self::readData($_GET, $key, $fallbackValue);
     }
 
     /**
@@ -140,12 +141,30 @@ class Request
 
     /**
      * @param null|string $key
+     * @param null|string $fallbackValue
      *
-     * @return array|mixed|null
+     * @return mixed|null
      */
-    public static function getPostData($key = null)
+    public static function getPostData($key = null, $fallbackValue = null)
     {
-        return self::readData($_POST, $key);
+        $response = self::getInputStream(false);
+
+        if ($response !== null)
+        {
+            parse_str($response, $postData);
+
+            if ($key === null)
+            {
+                return $postData;
+            }
+
+            if (isset($postData[$key]))
+            {
+                return $postData[$key];
+            }
+        }
+
+        return $fallbackValue;
     }
 
     /**
@@ -155,7 +174,7 @@ class Request
      */
     public static function hasPostData($key = null)
     {
-        return self::hasData($_POST, $key);
+        return self::hasData(self::getInputStream(false), $key);
     }
 
     /**
@@ -185,12 +204,13 @@ class Request
 
     /**
      * @param null|string $key
+     * @param null|string $fallbackValue
      *
-     * @return array|mixed|null
+     * @return mixed|null
      */
-    public static function getSessionData($key = null)
+    public static function getSessionData($key = null, $fallbackValue = null)
     {
-        return self::readData($_SESSION, $key);
+        return self::readData($_SESSION, $key, $fallbackValue);
     }
 
     /**
@@ -206,16 +226,17 @@ class Request
     /**
      * @param $source
      * @param null|string $key
+     * @param null|string $fallbackValue
      *
-     * @return array|null|mixed
+     * @return null|mixed
      */
-    private static function readData($source, $key = null)
+    private static function readData($source, $key = null, $fallbackValue = null)
     {
         if (isset($source))
         {
             if ($key === null)
             {
-                return (array)$source;
+                return $source;
             }
 
             if (isset($source[$key]))
@@ -224,7 +245,7 @@ class Request
             }
         }
 
-        return null;
+        return $fallbackValue;
     }
 
     /**
