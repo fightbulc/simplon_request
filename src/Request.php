@@ -140,6 +140,14 @@ class Request
     }
 
     /**
+     * @return bool
+     */
+    public static function isGet()
+    {
+        return self::isRequestMethod('GET');
+    }
+
+    /**
      * @param null $key
      * @param null $fallbackValue
      *
@@ -158,6 +166,14 @@ class Request
     public static function hasPostData($key = null)
     {
         return self::hasData($_POST, $key);
+    }
+
+    /**
+     * @return bool
+     */
+    public static function isPost()
+    {
+        return self::isRequestMethod('POST');
     }
 
     /**
@@ -240,6 +256,16 @@ class Request
     private static function hasData($source, $key = null)
     {
         return self::readData($source, $key) !== null;
+    }
+
+    /**
+     * @param $method
+     *
+     * @return bool
+     */
+    private static function isRequestMethod($method)
+    {
+        return isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === strtoupper($method);
     }
 
     /**
