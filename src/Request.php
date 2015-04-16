@@ -223,6 +223,17 @@ class Request
     }
 
     /**
+     * @param null|string $key
+     * @param null|string $fallbackValue
+     *
+     * @return mixed|null
+     */
+    public static function getServerData($key = null, $fallbackValue = null)
+    {
+        return self::readData($_SERVER, $key, $fallbackValue);
+    }
+
+    /**
      * @param $source
      * @param null|string $key
      * @param null|string $fallbackValue

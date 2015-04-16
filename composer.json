@@ -21,7 +21,7 @@
     ],
     "require": {
         "php": ">=5.4",
-        "simplon/helper": "0.8.*"
+        "simplon/helper": "0.10.*"
     },
     "autoload": {
         "psr-4": {
