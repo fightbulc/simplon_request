@@ -4,52 +4,8 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "39b1adf8a88109268325ab9e32000812",
-    "packages": [
-        {
-            "name": "simplon/helper",
-            "version": "0.8.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/fightbulc/simplon_helper.git",
-                "reference": "a6574f21202d374e061f62fe1574d80b0a6c4187"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/fightbulc/simplon_helper/zipball/a6574f21202d374e061f62fe1574d80b0a6c4187",
-                "reference": "a6574f21202d374e061f62fe1574d80b0a6c4187",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Simplon\\Helper\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Tino Ehrich",
-                    "email": "tino@bigpun.me",
-                    "role": "developer"
-                }
-            ],
-            "description": "Helpers for recurring tasks.",
-            "homepage": "https://github.com/fightbulc/simplon_helper",
-            "keywords": [
-                "helper",
-                "strings",
-                "value objects"
-            ],
-            "time": "2015-01-16 21:54:36"
-        }
-    ],
+    "hash": "8f22b0b7e62736a9555546f4744d1a56",
+    "packages": [],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
