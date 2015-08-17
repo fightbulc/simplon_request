@@ -300,7 +300,12 @@ class Request
             CURLOPT_POSTFIELDS     => $data
         ];
 
-        return self::process(array_merge($opt, $optCustom));
+        foreach ($optCustom as $key => $val)
+        {
+            $opt[$key] = $optCustom[$key];
+        }
+
+        return self::process($opt);
     }
 
     /**
