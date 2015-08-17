@@ -1,30 +1,30 @@
 {
-    "name": "simplon/request",
-    "description": "Simple, straight forward request helper",
-    "homepage": "https://github.com/fightbulc/simplon_request",
-    "type": "library",
-    "keywords": [
-        "request",
-        "curl",
-        "jsonrpc",
-        "get",
-        "post",
-        "auth"
-    ],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Tino Ehrich",
-            "email": "tino@bigpun.me",
-            "role": "developer"
-        }
-    ],
-    "require": {
-        "php": ">=5.4"
-    },
-    "autoload": {
-        "psr-4": {
-            "Simplon\\Request\\": "src/"
-        }
+  "name": "simplon/request",
+  "description": "Simple, straight forward request helper",
+  "homepage": "https://github.com/fightbulc/simplon_request",
+  "type": "library",
+  "keywords": [
+    "request",
+    "curl",
+    "jsonrpc",
+    "get",
+    "post",
+    "auth"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Tino Ehrich",
+      "email": "tino@bigpun.me",
+      "role": "developer"
     }
+  ],
+  "require": {
+    "php": ">=5.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Simplon\\Request\\": "src/"
+    }
+  }
 }

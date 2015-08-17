@@ -16,54 +16,55 @@ class Request
     /**
      * @param $url
      * @param array $data
+     * @param array $optCustom
      *
      * @return RequestResponse
      * @throws RequestException
      */
-    public static function get($url, array $data)
+    public static function get($url, array $data, array $optCustom = [])
     {
         $opt = [
             CURLOPT_URL            => $url . '?' . http_build_query($data),
             CURLOPT_RETURNTRANSFER => 1
         ];
 
-        return self::process($opt);
+        return self::process(array_merge($opt, $optCustom));
     }
 
     /**
      * @param $url
      * @param array $data
+     * @param array $optCustom
      *
      * @return RequestResponse
-     * @throws RequestException
      */
-    public static function post($url, array $data = [])
+    public static function post($url, array $data = [], array $optCustom = [])
     {
-        return self::postVariant(self::POST_VARIANT_POST, $url, $data);
+        return self::postVariant(self::POST_VARIANT_POST, $url, $data, $optCustom);
     }
 
     /**
      * @param $url
      * @param array $data
+     * @param array $optCustom
      *
      * @return RequestResponse
-     * @throws RequestException
      */
-    public static function put($url, array $data = [])
+    public static function put($url, array $data = [], array $optCustom = [])
     {
-        return self::postVariant(self::POST_VARIANT_PUT, $url, $data);
+        return self::postVariant(self::POST_VARIANT_PUT, $url, $data, $optCustom);
     }
 
     /**
      * @param $url
      * @param array $data
+     * @param array $optCustom
      *
      * @return RequestResponse
-     * @throws RequestException
      */
-    public static function delete($url, array $data = [])
+    public static function delete($url, array $data = [], array $optCustom = [])
     {
-        return self::postVariant(self::POST_VARIANT_DELETE, $url, $data);
+        return self::postVariant(self::POST_VARIANT_DELETE, $url, $data, $optCustom);
     }
 
     /**
@@ -71,12 +72,13 @@ class Request
      * @param $method
      * @param array $params
      * @param int $id
+     * @param array $optCustom
      * @param string $version
      *
      * @return RequestResponse
      * @throws RequestException
      */
-    public static function jsonRpc($url, $method, array $params = [], $id = 1, $version = '2.0')
+    public static function jsonRpc($url, $method, array $params = [], $id = 1, array $optCustom = [], $version = '2.0')
     {
         $opt = [
             CURLOPT_URL            => $url,
@@ -92,7 +94,7 @@ class Request
         ];
 
         // request
-        $requestResponse = self::process($opt);
+        $requestResponse = self::process(array_merge($opt, $optCustom));
 
         // decode json
         $decoded = json_decode($requestResponse->getContent(), true);
@@ -283,11 +285,12 @@ class Request
      * @param $type
      * @param $url
      * @param array $data
+     * @param array $optCustom
      *
      * @return RequestResponse
      * @throws RequestException
      */
-    private static function postVariant($type, $url, array $data = [])
+    private static function postVariant($type, $url, array $data = [], $optCustom = [])
     {
         $opt = [
             CURLOPT_URL            => $url,
@@ -297,7 +300,7 @@ class Request
             CURLOPT_POSTFIELDS     => $data
         ];
 
-        return self::process($opt);
+        return self::process(array_merge($opt, $optCustom));
     }
 
     /**
