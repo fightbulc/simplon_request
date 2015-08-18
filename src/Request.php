@@ -28,7 +28,7 @@ class Request
             CURLOPT_RETURNTRANSFER => 1
         ];
 
-        return self::process(array_merge($opt, $optCustom));
+        return self::process($opt, $optCustom);
     }
 
     /**
@@ -297,26 +297,29 @@ class Request
             CURLOPT_CUSTOMREQUEST  => $type,
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_POST           => 1,
-            CURLOPT_POSTFIELDS     => $data
+            CURLOPT_POSTFIELDS     => http_build_query($data)
         ];
 
+        return self::process($opt, $optCustom);
+    }
+
+    /**
+     * @param array $opt
+     * @param array $optCustom
+     *
+     * @return RequestResponse
+     * @throws RequestException
+     */
+    private static function process(array $opt, array $optCustom = [])
+    {
+        $curl = curl_init();
+
+        // merge options
         foreach ($optCustom as $key => $val)
         {
             $opt[$key] = $optCustom[$key];
         }
 
-        return self::process($opt);
-    }
-
-    /**
-     * @param array $opt
-     *
-     * @return RequestResponse
-     * @throws RequestException
-     */
-    private static function process(array $opt)
-    {
-        $curl = curl_init();
         curl_setopt_array($curl, $opt);
 
         // run request
