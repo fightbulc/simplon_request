@@ -21,7 +21,7 @@ class Request
      * @return RequestResponse
      * @throws RequestException
      */
-    public static function get($url, array $data, array $optCustom = [])
+    public static function get($url, array $data = [], array $optCustom = [])
     {
         if (empty($data) === false)
         {
@@ -319,7 +319,6 @@ class Request
         $curl = curl_init();
 
         // add options to retrieve header
-        $opt[CURLOPT_VERBOSE] = 1;
         $opt[CURLOPT_HEADER] = 1;
 
         // merge options
