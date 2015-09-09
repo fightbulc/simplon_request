@@ -15,7 +15,7 @@ class RequestResponse
     private $httpCode;
 
     /**
-     * @var array
+     * @var ResponseHeader
      */
     private $header;
 
@@ -74,7 +74,7 @@ class RequestResponse
     }
 
     /**
-     * @return array
+     * @return ResponseHeader
      */
     public function getHeader()
     {
@@ -82,11 +82,11 @@ class RequestResponse
     }
 
     /**
-     * @param array $header
+     * @param ResponseHeader $header
      *
      * @return RequestResponse
      */
-    public function setHeader(array $header)
+    public function setHeader(ResponseHeader $header)
     {
         $this->header = $header;
 

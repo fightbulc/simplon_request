@@ -12,6 +12,8 @@ class Request
     const POST_VARIANT_POST = 'POST';
     const POST_VARIANT_PUT = 'PUT';
     const POST_VARIANT_DELETE = 'DELETE';
+    const DATA_FORMAT_QUERY_STRING = 'query-string';
+    const DATA_FORMAT_JSON = 'json';
 
     /**
      * @param $url
@@ -40,36 +42,39 @@ class Request
      * @param $url
      * @param array $data
      * @param array $optCustom
+     * @param string $dataType
      *
      * @return RequestResponse
      */
-    public static function post($url, array $data = [], array $optCustom = [])
+    public static function post($url, array $data = [], array $optCustom = [], $dataType = self::DATA_FORMAT_QUERY_STRING)
     {
-        return self::postVariant(self::POST_VARIANT_POST, $url, $data, $optCustom);
+        return self::postVariant(self::POST_VARIANT_POST, $url, $data, $optCustom, $dataType);
     }
 
     /**
      * @param $url
      * @param array $data
      * @param array $optCustom
+     * @param string $dataType
      *
      * @return RequestResponse
      */
-    public static function put($url, array $data = [], array $optCustom = [])
+    public static function put($url, array $data = [], array $optCustom = [], $dataType = self::DATA_FORMAT_QUERY_STRING)
     {
-        return self::postVariant(self::POST_VARIANT_PUT, $url, $data, $optCustom);
+        return self::postVariant(self::POST_VARIANT_PUT, $url, $data, $optCustom, $dataType);
     }
 
     /**
      * @param $url
      * @param array $data
      * @param array $optCustom
+     * @param string $dataType
      *
      * @return RequestResponse
      */
-    public static function delete($url, array $data = [], array $optCustom = [])
+    public static function delete($url, array $data = [], array $optCustom = [], $dataType = self::DATA_FORMAT_QUERY_STRING)
     {
-        return self::postVariant(self::POST_VARIANT_DELETE, $url, $data, $optCustom);
+        return self::postVariant(self::POST_VARIANT_DELETE, $url, $data, $optCustom, $dataType);
     }
 
     /**
@@ -290,19 +295,34 @@ class Request
      * @param $url
      * @param array $data
      * @param array $optCustom
+     * @param string $dataFormat
      *
      * @return RequestResponse
      * @throws RequestException
      */
-    private static function postVariant($type, $url, array $data = [], $optCustom = [])
+    private static function postVariant($type, $url, array $data = [], $optCustom = [], $dataFormat)
     {
         $opt = [
             CURLOPT_URL            => $url,
             CURLOPT_CUSTOMREQUEST  => $type,
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_POST           => 1,
-            CURLOPT_POSTFIELDS     => http_build_query($data)
         ];
+
+        if (empty($data) === false)
+        {
+            switch ($dataFormat)
+            {
+                case self::DATA_FORMAT_JSON:
+                    $data = json_encode($data);
+                    break;
+
+                default:
+                    $data = http_build_query($data);
+            }
+
+            $opt[CURLOPT_POSTFIELDS] = $data;
+        }
 
         return self::process($opt, $optCustom);
     }
@@ -368,7 +388,7 @@ class Request
     /**
      * @param string $headers
      *
-     * @return array
+     * @return ResponseHeader
      */
     private static function parseHttpHeaders($headers)
     {
@@ -380,9 +400,9 @@ class Request
         foreach ($lines as $line)
         {
             $parts = explode(':', $line);
-            $data[strtolower(array_shift($parts))] = join(':', $parts);
+            $data[strtolower(array_shift($parts))] = trim(join(':', $parts));
         }
 
-        return $data;
+        return new ResponseHeader($data);
     }
 }
