@@ -23,7 +23,7 @@ class Request
      * @return RequestResponse
      * @throws RequestException
      */
-    public static function get($url, array $data = [], array $optCustom = [])
+    public function get($url, array $data = [], array $optCustom = [])
     {
         if (empty($data) === false)
         {
@@ -32,10 +32,10 @@ class Request
 
         $opt = [
             CURLOPT_URL            => $url,
-            CURLOPT_RETURNTRANSFER => 1
+            CURLOPT_RETURNTRANSFER => 1,
         ];
 
-        return self::process($opt, $optCustom);
+        return $this->process($opt, $optCustom);
     }
 
     /**
@@ -46,9 +46,9 @@ class Request
      *
      * @return RequestResponse
      */
-    public static function post($url, array $data = [], array $optCustom = [], $dataType = self::DATA_FORMAT_QUERY_STRING)
+    public function post($url, array $data = [], array $optCustom = [], $dataType = self::DATA_FORMAT_QUERY_STRING)
     {
-        return self::postVariant(self::POST_VARIANT_POST, $url, $data, $optCustom, $dataType);
+        return $this->postVariant(self::POST_VARIANT_POST, $url, $data, $optCustom, $dataType);
     }
 
     /**
@@ -59,9 +59,9 @@ class Request
      *
      * @return RequestResponse
      */
-    public static function put($url, array $data = [], array $optCustom = [], $dataType = self::DATA_FORMAT_QUERY_STRING)
+    public function put($url, array $data = [], array $optCustom = [], $dataType = self::DATA_FORMAT_QUERY_STRING)
     {
-        return self::postVariant(self::POST_VARIANT_PUT, $url, $data, $optCustom, $dataType);
+        return $this->postVariant(self::POST_VARIANT_PUT, $url, $data, $optCustom, $dataType);
     }
 
     /**
@@ -72,9 +72,9 @@ class Request
      *
      * @return RequestResponse
      */
-    public static function delete($url, array $data = [], array $optCustom = [], $dataType = self::DATA_FORMAT_QUERY_STRING)
+    public function delete($url, array $data = [], array $optCustom = [], $dataType = self::DATA_FORMAT_QUERY_STRING)
     {
-        return self::postVariant(self::POST_VARIANT_DELETE, $url, $data, $optCustom, $dataType);
+        return $this->postVariant(self::POST_VARIANT_DELETE, $url, $data, $optCustom, $dataType);
     }
 
     /**
@@ -87,7 +87,7 @@ class Request
      * @return RequestResponse
      * @throws RequestException
      */
-    public static function jsonRpc($url, $method, array $params = [], $id = 1, array $optCustom = [])
+    public function jsonRpc($url, $method, array $params = [], $id = 1, array $optCustom = [])
     {
         $opt = [
             CURLOPT_URL            => $url,
@@ -103,7 +103,7 @@ class Request
         ];
 
         // request
-        $requestResponse = self::process(array_merge($opt, $optCustom));
+        $requestResponse = $this->process(array_merge($opt, $optCustom));
 
         // decode json
         $decoded = json_decode($requestResponse->getBody(), true);
@@ -120,7 +120,7 @@ class Request
     /**
      * @param string $url
      */
-    public static function redirect($url)
+    public function redirect($url)
     {
         // redirect now
         header('Location: ' . $url);
@@ -135,9 +135,9 @@ class Request
      *
      * @return mixed|null
      */
-    public static function getGetData($key = null, $fallbackValue = null)
+    public function getGetData($key = null, $fallbackValue = null)
     {
-        return self::readData($_GET, $key, $fallbackValue);
+        return $this->readData($_GET, $key, $fallbackValue);
     }
 
     /**
@@ -145,17 +145,17 @@ class Request
      *
      * @return bool
      */
-    public static function hasGetData($key = null)
+    public function hasGetData($key = null)
     {
-        return self::hasData($_GET, $key);
+        return $this->hasData($_GET, $key);
     }
 
     /**
      * @return bool
      */
-    public static function isGet()
+    public function isGet()
     {
-        return self::isRequestMethod('GET');
+        return $this->isRequestMethod('GET');
     }
 
     /**
@@ -164,9 +164,9 @@ class Request
      *
      * @return array|string
      */
-    public static function getPostData($key = null, $fallbackValue = null)
+    public function getPostData($key = null, $fallbackValue = null)
     {
-        return self::readData($_POST, $key, $fallbackValue);
+        return $this->readData($_POST, $key, $fallbackValue);
     }
 
     /**
@@ -174,17 +174,17 @@ class Request
      *
      * @return bool
      */
-    public static function hasPostData($key = null)
+    public function hasPostData($key = null)
     {
-        return self::hasData($_POST, $key);
+        return $this->hasData($_POST, $key);
     }
 
     /**
      * @return bool
      */
-    public static function isPost()
+    public function isPost()
     {
-        return self::isRequestMethod('POST');
+        return $this->isRequestMethod('POST');
     }
 
     /**
@@ -192,7 +192,7 @@ class Request
      *
      * @return array|string
      */
-    public static function getInputStream($isJson = true)
+    public function getInputStream($isJson = true)
     {
         $requestJson = (string)file_get_contents('php://input');
 
@@ -207,9 +207,9 @@ class Request
     /**
      * @return bool
      */
-    public static function hasInputStream()
+    public function hasInputStream()
     {
-        return self::hasData(self::getInputStream());
+        return $this->hasData($this->getInputStream());
     }
 
     /**
@@ -218,9 +218,9 @@ class Request
      *
      * @return mixed|null
      */
-    public static function getSessionData($key = null, $fallbackValue = null)
+    public function getSessionData($key = null, $fallbackValue = null)
     {
-        return self::readData($_SESSION, $key, $fallbackValue);
+        return $this->readData($_SESSION, $key, $fallbackValue);
     }
 
     /**
@@ -228,9 +228,9 @@ class Request
      *
      * @return bool
      */
-    public static function hasSessionData($key = null)
+    public function hasSessionData($key = null)
     {
-        return self::hasData($_SESSION, $key);
+        return $this->hasData($_SESSION, $key);
     }
 
     /**
@@ -239,9 +239,9 @@ class Request
      *
      * @return mixed|null
      */
-    public static function getServerData($key = null, $fallbackValue = null)
+    public function getServerData($key = null, $fallbackValue = null)
     {
-        return self::readData($_SERVER, $key, $fallbackValue);
+        return $this->readData($_SERVER, $key, $fallbackValue);
     }
 
     /**
@@ -251,7 +251,7 @@ class Request
      *
      * @return null|mixed
      */
-    private static function readData($source, $key = null, $fallbackValue = null)
+    private function readData($source, $key = null, $fallbackValue = null)
     {
         if (isset($source))
         {
@@ -275,9 +275,9 @@ class Request
      *
      * @return bool
      */
-    private static function hasData($source, $key = null)
+    private function hasData($source, $key = null)
     {
-        return self::readData($source, $key) !== null;
+        return $this->readData($source, $key) !== null;
     }
 
     /**
@@ -285,7 +285,7 @@ class Request
      *
      * @return bool
      */
-    private static function isRequestMethod($method)
+    private function isRequestMethod($method)
     {
         return isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === strtoupper($method);
     }
@@ -300,7 +300,7 @@ class Request
      * @return RequestResponse
      * @throws RequestException
      */
-    private static function postVariant($type, $url, array $data = [], $optCustom = [], $dataFormat)
+    private function postVariant($type, $url, array $data = [], $optCustom = [], $dataFormat)
     {
         $opt = [
             CURLOPT_URL            => $url,
@@ -324,7 +324,7 @@ class Request
             $opt[CURLOPT_POSTFIELDS] = $data;
         }
 
-        return self::process($opt, $optCustom);
+        return $this->process($opt, $optCustom);
     }
 
     /**
@@ -334,7 +334,7 @@ class Request
      * @return RequestResponse
      * @throws RequestException
      */
-    private static function process(array $opt, array $optCustom = [])
+    private function process(array $opt, array $optCustom = [])
     {
         $curl = curl_init();
 
@@ -354,7 +354,7 @@ class Request
 
         // parse header
         $header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
-        $header = self::parseHttpHeaders(substr($response, 0, $header_size));
+        $header = $this->parseHttpHeaders(substr($response, 0, $header_size));
 
         // parse body
         $body = substr($response, $header_size);
@@ -390,7 +390,7 @@ class Request
      *
      * @return ResponseHeader
      */
-    private static function parseHttpHeaders($headers)
+    private function parseHttpHeaders($headers)
     {
         $data = [];
         $lines = explode("\r\n", chop($headers));
