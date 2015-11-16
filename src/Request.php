@@ -16,7 +16,7 @@ class Request
     const DATA_FORMAT_JSON = 'json';
 
     /**
-     * @param $url
+     * @param string $url
      * @param array $data
      * @param array $optCustom
      *
@@ -39,7 +39,7 @@ class Request
     }
 
     /**
-     * @param $url
+     * @param string $url
      * @param array $data
      * @param array $optCustom
      * @param string $dataType
@@ -52,7 +52,7 @@ class Request
     }
 
     /**
-     * @param $url
+     * @param string $url
      * @param array $data
      * @param array $optCustom
      * @param string $dataType
@@ -65,7 +65,7 @@ class Request
     }
 
     /**
-     * @param $url
+     * @param string $url
      * @param array $data
      * @param array $optCustom
      * @param string $dataType
@@ -78,8 +78,8 @@ class Request
     }
 
     /**
-     * @param $url
-     * @param $method
+     * @param string $url
+     * @param string $method
      * @param array $params
      * @param int $id
      * @param array $optCustom
@@ -130,8 +130,8 @@ class Request
     }
 
     /**
-     * @param null|string $key
-     * @param null|string $fallbackValue
+     * @param string $key
+     * @param string $fallbackValue
      *
      * @return mixed|null
      */
@@ -141,7 +141,7 @@ class Request
     }
 
     /**
-     * @param null|string $key
+     * @param string $key
      *
      * @return bool
      */
@@ -159,10 +159,10 @@ class Request
     }
 
     /**
-     * @param null $key
-     * @param null $fallbackValue
+     * @param string $key
+     * @param string $fallbackValue
      *
-     * @return array|string
+     * @return mixed|null
      */
     public function getPostData($key = null, $fallbackValue = null)
     {
@@ -170,7 +170,7 @@ class Request
     }
 
     /**
-     * @param null|string $key
+     * @param string $key
      *
      * @return bool
      */
@@ -213,8 +213,8 @@ class Request
     }
 
     /**
-     * @param null|string $key
-     * @param null|string $fallbackValue
+     * @param string $key
+     * @param string $fallbackValue
      *
      * @return mixed|null
      */
@@ -224,7 +224,7 @@ class Request
     }
 
     /**
-     * @param null|string $key
+     * @param string $key
      *
      * @return bool
      */
@@ -234,8 +234,8 @@ class Request
     }
 
     /**
-     * @param null|string $key
-     * @param null|string $fallbackValue
+     * @param string $key
+     * @param string $fallbackValue
      *
      * @return mixed|null
      */
@@ -245,9 +245,9 @@ class Request
     }
 
     /**
-     * @param $source
-     * @param null|string $key
-     * @param null|string $fallbackValue
+     * @param string $source
+     * @param string $key
+     * @param string $fallbackValue
      *
      * @return null|mixed
      */
@@ -270,8 +270,8 @@ class Request
     }
 
     /**
-     * @param null|array $source
-     * @param null $key
+     * @param array $source
+     * @param string $key
      *
      * @return bool
      */
@@ -281,7 +281,7 @@ class Request
     }
 
     /**
-     * @param $method
+     * @param string $method
      *
      * @return bool
      */
@@ -291,8 +291,8 @@ class Request
     }
 
     /**
-     * @param $type
-     * @param $url
+     * @param string $type
+     * @param string $url
      * @param array $data
      * @param array $optCustom
      * @param string $dataFormat
