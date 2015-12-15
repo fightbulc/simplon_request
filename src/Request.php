@@ -245,6 +245,27 @@ class Request
     }
 
     /**
+     * @param string $key
+     *
+     * @return bool
+     */
+    public function hasFileData($key = null)
+    {
+        return $this->hasData($_FILES, $key);
+    }
+
+    /**
+     * @param string $key
+     * @param string $fallbackValue
+     *
+     * @return mixed|null
+     */
+    public function getFileData($key = null, $fallbackValue = null)
+    {
+        return $this->readData($_FILES, $key, $fallbackValue);
+    }
+
+    /**
      * @param string $source
      * @param string $key
      * @param string $fallbackValue
