@@ -224,7 +224,7 @@ class ResponseHeader
      */
     public function isJson()
     {
-        return $this->getContentType() === 'application/json';
+        return preg_match('/application\/json/is', $this->getContentType());
     }
 
     /**
@@ -232,7 +232,7 @@ class ResponseHeader
      */
     public function isXml()
     {
-        return $this->getContentType() === 'application/xml';
+        return preg_match('/application\/xml/is', $this->getContentType());
     }
 
     /**
@@ -240,7 +240,7 @@ class ResponseHeader
      */
     public function isHtml()
     {
-        return $this->getContentType() === 'text/html';
+        return preg_match('/text\/html/is', $this->getContentType());
     }
 
     /**
@@ -248,7 +248,7 @@ class ResponseHeader
      */
     public function isText()
     {
-        return $this->getContentType() === 'text/plain';
+        return preg_match('/text\/plain/is', $this->getContentType());
     }
 
     /**
@@ -256,7 +256,7 @@ class ResponseHeader
      */
     public function isStream()
     {
-        return $this->getContentType() === 'application/octet-stream';
+        return preg_match('/application\/octet-stream/is', $this->getContentType());
     }
 
     /**
@@ -425,5 +425,19 @@ class ResponseHeader
     public function getSetCookie()
     {
         return $this->setCookie;
+    }
+    
+    /**
+     *@return string
+     */
+    public function getCharset()
+    {
+        $a = explode(';',$this->getContentType());
+        if(!empty($a)){
+            foreach($a as $v){
+                if (preg_match('/charset=(.*)/is', $v, $poc)) return $poc[1];
+            }
+        }
+        return null;
     }
 }
