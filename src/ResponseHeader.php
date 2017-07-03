@@ -114,6 +114,16 @@ class ResponseHeader
     private $xPoweredBy;
 
     /**
+     * @var string
+     */
+    private $xFrameOptions;
+    
+    /**
+     * @var string
+     */
+    private $p3p;
+
+    /**
      * @param array $data
      */
     public function __construct(array $data)
@@ -204,6 +214,14 @@ class ResponseHeader
                     $this->xPoweredBy = $val;
                     break;
 
+		case 'x-frame-options':
+                    $this->xFrameOptions = $val;
+                    break;
+
+		case 'p3p':
+                    $this->p3p = $val;
+                    break;
+
                 default:
             }
         }
@@ -262,7 +280,7 @@ class ResponseHeader
     /**
      * @return array
      */
-    public function getRawData()
+    public function getHttpHeadersArray()
     {
         return $this->rawData;
     }
@@ -427,6 +445,22 @@ class ResponseHeader
         return $this->setCookie;
     }
     
+    /**
+     * @return string
+     */
+    public function getXFrameOptions()
+    {
+        return $this->xFrameOptions;
+    }
+
+    /**
+     * @return string
+     */
+    public function getP3P()
+    {
+        return $this->p3p;
+    }
+
     /**
      *@return string
      */
