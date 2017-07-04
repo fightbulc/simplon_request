@@ -16,6 +16,50 @@ class Request
     const DATA_FORMAT_JSON = 'json';
 
     /**
+     * @var array
+     */
+    private $requestHeaders = array();
+    
+     /**
+     * @var bool
+     */
+    private $isHttpHeadersLogged = false;
+    
+     /**
+     * @var string
+     */
+    private $logFileName = 'headers_log.txt';
+    
+    /**
+     * @param string $filename
+     */
+    public function setLog($filename = '')
+    {
+	$this->isHttpHeadersLogged = true;
+	
+	if (!empty($filename))
+	{
+		$this->logFileName = $filename;  
+	}   
+    }
+    
+    /**
+     * @param array $reqheaders
+     */
+    public function setRequestHeaders(array $reqheaders = [])
+    {
+	if (!empty($reqheaders))
+	{
+		$this->requestHeaders  = $reqheaders;
+	}
+    }
+    
+    public function clearRequestHeaders()
+    {
+	$this->requestHeaders  = array();
+    }
+
+    /**
      * @param string $url
      * @param array $data
      * @param array $optCustom
@@ -367,11 +411,70 @@ class Request
         {
             $opt[$key] = $optCustom[$key];
         }
+        
+        // set request headers
+        if (!empty($this->requestHeaders))
+        {
+        	$opt[CURLOPT_HTTPHEADER] = $this->requestHeaders;
+        } 
+        
+        // log headers
+        if ($this->isHttpHeadersLogged)
+        {
+        
+        	$f = fopen( $this->logFileName, 'a');
+        	
+		$opt[CURLOPT_VERBOSE] = 1;
+		$opt[CURLOPT_CERTINFO] = 1;
+        	$opt[CURLOPT_STDERR] = $f;
+        
+        	curl_setopt_array($curl, $opt);
+        
+        	// run request
+        	$response = curl_exec($curl);
+        
+        	fwrite($f, "\r\n");
+        	fflush($f);
+        	fclose($f);
 
-        curl_setopt_array($curl, $opt);
+        	// parse header
+        	$header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+        	$header = $this->parseHttpHeaders(substr($response, 0, $header_size));
 
+        	// parse body
+        	$body = substr($response, $header_size);
+
+        	// cache error if any occurs
+        	$error = curl_error($curl);
+
+        	// cache http code
+        	$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+        	// url on which we eventually might have ended up (301 redirects)
+        	$lastUrl = curl_getinfo($curl, CURLINFO_EFFECTIVE_URL);
+
+		
+        	curl_close($curl);
+
+        	// throw if request failed
+        	if ($response === false)
+        	{
+            		throw new RequestException($error);
+        	}
+
+        	// --------------------------------------
+
+        	return (new RequestResponse())
+            		->setHttpCode($httpCode)
+            		->setHeader($header)
+            		->setBody($body)
+            		->setLastUrl($lastUrl);
+	} // if $this->isHttpHeadersLogged
+    
+	curl_setopt_array($curl, $opt);
+        
         // run request
-        $response = curl_exec($curl);
+        $response = curl_exec($curl);       
 
         // parse header
         $header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
@@ -400,12 +503,13 @@ class Request
         // --------------------------------------
 
         return (new RequestResponse())
-            ->setHttpCode($httpCode)
-            ->setHeader($header)
-            ->setBody($body)
-            ->setLastUrl($lastUrl);
+            	->setHttpCode($httpCode)
+            	->setHeader($header)
+            	->setBody($body)
+            	->setLastUrl($lastUrl);
+    
     }
-
+    
     /**
      * @param string $headers
      *
@@ -421,7 +525,16 @@ class Request
         foreach ($lines as $line)
         {
             $parts = explode(':', $line);
-            $data[strtolower(array_shift($parts))] = trim(join(':', $parts));
+            $key = strtolower(array_shift($parts));
+            if (!empty($data[$key]))
+            {
+		$data[$key] = $data[$key].trim(join(':', $parts)); // sometimes response has 2 headers Set-Cookie
+	    }
+            else
+            {
+            	$data[$key] = trim(join(':', $parts));
+            }
+
         }
 
         return new ResponseHeader($data);
