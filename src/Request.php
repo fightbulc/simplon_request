@@ -37,7 +37,10 @@ class Request
     {
 	$this->isHttpHeadersLogged = true;
 	
-	if( !empty($filename) ) $this->logFileName = $filename;    
+	if (!empty($filename))
+	{
+		$this->logFileName = $filename;  
+	}   
     }
     
     /**
@@ -45,7 +48,10 @@ class Request
      */
     public function setRequestHeaders(array $reqheaders = [])
     {
-	if ( !empty($reqheaders) ) $this->requestHeaders  = $reqheaders;
+	if (!empty($reqheaders))
+	{
+		$this->requestHeaders  = $reqheaders;
+	}
     }
     
     public function clearRequestHeaders()
@@ -407,10 +413,14 @@ class Request
         }
         
         // set request headers
-        if ( !empty($this->requestHeaders) ) $opt[CURLOPT_HTTPHEADER] = $this->requestHeaders;
+        if (!empty($this->requestHeaders))
+        {
+        	$opt[CURLOPT_HTTPHEADER] = $this->requestHeaders;
+        } 
         
         // log headers
-        if ( $this->isHttpHeadersLogged ) {
+        if ($this->isHttpHeadersLogged)
+        {
         
         	$f = fopen( $this->logFileName, 'a');
         	
@@ -516,12 +526,14 @@ class Request
         {
             $parts = explode(':', $line);
             $key = strtolower(array_shift($parts));
-            if ( !empty($data[$key]) ) {
+            if (!empty($data[$key]))
+            {
 		$data[$key] = $data[$key].trim(join(':', $parts)); // sometimes response has 2 headers Set-Cookie
 	    }
-		else {
+            else
+            {
             	$data[$key] = trim(join(':', $parts));
-		}
+            }
 
         }
 

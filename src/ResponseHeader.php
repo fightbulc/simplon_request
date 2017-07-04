@@ -242,7 +242,14 @@ class ResponseHeader
      */
     public function isJson()
     {
-        return preg_match('/application\/json/is', $this->getContentType());
+        if (preg_match('/application\/json/is', $this->getContentType()) == 1)
+        {
+        	return true;
+        }
+        else
+        {
+        	return false;
+        }
     }
 
     /**
@@ -250,7 +257,14 @@ class ResponseHeader
      */
     public function isXml()
     {
-        return preg_match('/application\/xml/is', $this->getContentType());
+        if (preg_match('/application\/xml/is', $this->getContentType()) == 1)
+        {
+        	return true;
+        }
+        else
+        {
+        	return false;
+        }
     }
 
     /**
@@ -258,7 +272,14 @@ class ResponseHeader
      */
     public function isHtml()
     {
-        return preg_match('/text\/html/is', $this->getContentType());
+        if (preg_match('/text\/html/is', $this->getContentType()) == 1)
+        {
+        	return true;
+        }
+        else
+        {
+        	return false;
+        }
     }
 
     /**
@@ -266,7 +287,14 @@ class ResponseHeader
      */
     public function isText()
     {
-        return preg_match('/text\/plain/is', $this->getContentType());
+        if (preg_match('/text\/plain/is', $this->getContentType()) == 1)
+        {
+        	return true;
+        }
+        else
+        {
+        	return false;
+        }
     }
 
     /**
@@ -274,7 +302,14 @@ class ResponseHeader
      */
     public function isStream()
     {
-        return preg_match('/application\/octet-stream/is', $this->getContentType());
+        if (preg_match('/application\/octet-stream/is', $this->getContentType()) == 1)
+        {
+        	return true;
+        }
+        else
+        {
+        	return false;
+        }
     }
 
     /**
@@ -467,9 +502,14 @@ class ResponseHeader
     public function getCharset()
     {
         $a = explode(';',$this->getContentType());
-        if(!empty($a)){
-            foreach($a as $v){
-                if (preg_match('/charset=(.*)/is', $v, $poc)) return $poc[1];
+        if (!empty($a))
+        {
+            foreach($a as $v)
+            {
+                if (preg_match('/charset=(.*)/is', $v, $poc)) 
+                {
+                	return $poc[1];
+                }
             }
         }
         return null;
