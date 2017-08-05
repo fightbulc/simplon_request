@@ -1,6 +1,6 @@
 {
   "name": "gesundberg/simplon_request",
-  "description": "Simple, straight forward request helper",
+  "description": "Simple, straight forward request helper via CURL",
   "homepage": "https://github.com/Gesundberg/simplon_request",
   "type": "library",
   "keywords": [
