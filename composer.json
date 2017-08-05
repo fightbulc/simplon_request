@@ -1,7 +1,7 @@
 {
-  "name": "simplon/request",
-  "description": "Simple, straight forward request helper",
-  "homepage": "https://github.com/fightbulc/simplon_request",
+  "name": "gesundberg/simplon_request",
+  "description": "Simple, straight forward request helper via CURL",
+  "homepage": "https://github.com/Gesundberg/simplon_request",
   "type": "library",
   "keywords": [
     "request",
@@ -16,6 +16,11 @@
     {
       "name": "Tino Ehrich",
       "email": "tino@bigpun.me",
+      "role": "developer"
+    },
+    {
+      "name": "Andreas Gesundberg",
+      "email": "happy8@i.ua",
       "role": "developer"
     }
   ],

@@ -114,6 +114,16 @@ class ResponseHeader
     private $xPoweredBy;
 
     /**
+     * @var string
+     */
+    private $xFrameOptions;
+    
+    /**
+     * @var string
+     */
+    private $p3p;
+
+    /**
      * @param array $data
      */
     public function __construct(array $data)
@@ -204,6 +214,14 @@ class ResponseHeader
                     $this->xPoweredBy = $val;
                     break;
 
+		case 'x-frame-options':
+                    $this->xFrameOptions = $val;
+                    break;
+
+		case 'p3p':
+                    $this->p3p = $val;
+                    break;
+
                 default:
             }
         }
@@ -224,7 +242,14 @@ class ResponseHeader
      */
     public function isJson()
     {
-        return $this->getContentType() === 'application/json';
+        if (preg_match('/application\/json/is', $this->getContentType()) == 1)
+        {
+        	return true;
+        }
+        else
+        {
+        	return false;
+        }
     }
 
     /**
@@ -232,7 +257,14 @@ class ResponseHeader
      */
     public function isXml()
     {
-        return $this->getContentType() === 'application/xml';
+        if (preg_match('/application\/xml/is', $this->getContentType()) == 1)
+        {
+        	return true;
+        }
+        else
+        {
+        	return false;
+        }
     }
 
     /**
@@ -240,7 +272,14 @@ class ResponseHeader
      */
     public function isHtml()
     {
-        return $this->getContentType() === 'text/html';
+        if (preg_match('/text\/html/is', $this->getContentType()) == 1)
+        {
+        	return true;
+        }
+        else
+        {
+        	return false;
+        }
     }
 
     /**
@@ -248,7 +287,14 @@ class ResponseHeader
      */
     public function isText()
     {
-        return $this->getContentType() === 'text/plain';
+        if (preg_match('/text\/plain/is', $this->getContentType()) == 1)
+        {
+        	return true;
+        }
+        else
+        {
+        	return false;
+        }
     }
 
     /**
@@ -256,13 +302,20 @@ class ResponseHeader
      */
     public function isStream()
     {
-        return $this->getContentType() === 'application/octet-stream';
+        if (preg_match('/application\/octet-stream/is', $this->getContentType()) == 1)
+        {
+        	return true;
+        }
+        else
+        {
+        	return false;
+        }
     }
 
     /**
      * @return array
      */
-    public function getRawData()
+    public function getHttpHeadersArray()
     {
         return $this->rawData;
     }
@@ -425,5 +478,40 @@ class ResponseHeader
     public function getSetCookie()
     {
         return $this->setCookie;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getXFrameOptions()
+    {
+        return $this->xFrameOptions;
+    }
+
+    /**
+     * @return string
+     */
+    public function getP3P()
+    {
+        return $this->p3p;
+    }
+
+    /**
+     *@return string
+     */
+    public function getCharset()
+    {
+        $a = explode(';',$this->getContentType());
+        if (!empty($a))
+        {
+            foreach($a as $v)
+            {
+                if (preg_match('/charset=(.*)/is', $v, $poc)) 
+                {
+                	return $poc[1];
+                }
+            }
+        }
+        return null;
     }
 }
