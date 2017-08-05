@@ -30,7 +30,6 @@ class RequestResponse
     private $lastUrl;
 
     /**
-     * @deprecated
      *
      * @return mixed
      */
@@ -40,7 +39,6 @@ class RequestResponse
     }
 
     /**
-     * @deprecated
      *
      * @param mixed $body
      *
