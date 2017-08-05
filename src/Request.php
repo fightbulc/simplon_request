@@ -310,7 +310,7 @@ class Request
     }
 
     /**
-     * @param string $source
+     * @param array $source
      * @param string $key
      * @param string $fallbackValue
      *
